@@ -15,7 +15,7 @@ SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
 -- ----------------------------
--- Table structure for Block
+-- Table structure for Block; 节点出块
 -- ----------------------------
 DROP TABLE IF EXISTS `Block`;
 CREATE TABLE `Block`  (
@@ -28,16 +28,16 @@ CREATE TABLE `Block`  (
   `type` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `reward_address` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '出块奖励地址',
   `reward_money` decimal(20, 10) NULL DEFAULT NULL COMMENT '出块奖励金额',
-  `is_useful` bit(1) NULL DEFAULT b'1' COMMENT '是否有效，为最长链的区块',
+  `is_useful` bit(1) NULL DEFAULT b'1' COMMENT '是否有效，为最长链的区块, 1为有效',
   `bits` int(255) NULL DEFAULT NULL COMMENT '难度',
-  `reward_state` bit(1) NULL DEFAULT b'0' COMMENT 'DPOS出块收益计算状态',
+  `reward_state` bit(1) NULL DEFAULT b'0' COMMENT 'DPOS出块收益计算状态, 0为未计算，1为已计算',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `hash`(`hash`) USING BTREE,
   INDEX `height`(`height`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
--- Table structure for DposDailyReward
+-- Table structure for DposDailyReward; 地址某一天的奖励情况汇总
 -- ----------------------------
 DROP TABLE IF EXISTS `DposDailyReward`;
 CREATE TABLE `DposDailyReward`  (
@@ -51,7 +51,7 @@ CREATE TABLE `DposDailyReward`  (
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
--- Table structure for DposRewardDetails
+-- Table structure for DposRewardDetails; 出块奖励详情（某一高度上每个地址的投票、奖励
 -- ----------------------------
 DROP TABLE IF EXISTS `DposRewardDetails`;
 CREATE TABLE `DposRewardDetails`  (
@@ -126,7 +126,7 @@ CREATE TABLE `AppInfo`  (
 );
 
 -- ----------------------------
--- Table structure for Tx
+-- Table structure for Tx; 
 -- ----------------------------
 DROP TABLE IF EXISTS `Tx`;
 CREATE TABLE `Tx`  (

@@ -45,16 +45,17 @@ namespace Test
                     }
                 }
                 Console.WriteLine("查询结果：");
-                WebApiTest_AddProduct(str);
+                WebApiTest_POWData(str);
                 Console.WriteLine();
             }
         }
 
         /// <summary>
+        /// 查询pow奖励数据
         /// eg. 2020-07-22
         /// </summary>
         /// <param name="date"></param>
-        public static void WebApiTest_AddProduct(string date)
+        public static void WebApiTest_POWData(string date)
         {
             using (var client = new HttpClient())
             {
