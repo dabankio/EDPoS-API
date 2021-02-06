@@ -19,7 +19,7 @@ namespace EDPoS_API_Core.Bll
         }
 
         /// <summary>
-        /// 
+        /// 查询 [节点地址][日期]的所有汇总dpos奖励数据
         /// </summary>
         /// <param name="dpos_addr"></param>
         /// <param name="date"></param>

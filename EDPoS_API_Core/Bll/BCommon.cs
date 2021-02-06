@@ -18,6 +18,9 @@ namespace EDPoS_API_Core.Bll
             connStr = str;
         }
 
+        /// <summary>
+        /// 时间范围内的出块奖励汇总，以miner addr分组
+        /// </summary>
         public async Task<List<MBlockPa>> GetBlockDailyReward(string reward_address, string date, string ConsensusType = "")
         {
             if (SqlAttack.IsDangerous(ref reward_address) || SqlAttack.IsDangerous(ref date))

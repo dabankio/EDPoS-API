@@ -68,6 +68,7 @@ namespace EDPoS_API_Core.Controllers
         [HttpGet]
         public async Task<string> Get(string addrFrom = "", string addrTo = "", string date = "", bool isNewWay = true)
         {
+            //only addrFrom,date used
             Result<List<MPowPoolDailyReward>> res = new Result<List<MPowPoolDailyReward>>();
             var lst = new List<MPowPoolDailyReward>();
             try
@@ -96,8 +97,8 @@ namespace EDPoS_API_Core.Controllers
                         if (DateTime.TryParse(date, out dt))
                         {
                             var dateEnd = dt.AddDays(1);
-                            var dStart = Convert.ToInt64(CommonHelper.GetTimeStamp(dt, zone)) / 1000;
-                            var dEnd = Convert.ToInt64(CommonHelper.GetTimeStamp(dateEnd, zone)) / 1000;
+                            var dStart = Convert.ToInt64(CommonHelper.GetTimeStamp(dt, zone)) / 1000; //假定：时间start
+                            var dEnd = Convert.ToInt64(CommonHelper.GetTimeStamp(dateEnd, zone)) / 1000;//假定：时间end
                             lst = await b.GetLstSum(dStart.ToString(), dEnd.ToString(), addrFrom, addrTo);
                         }
                     }
@@ -126,23 +127,25 @@ namespace EDPoS_API_Core.Controllers
                         }
                     }
 
+                    //logic: start, 如果奖励总量不够，就补足97%
                     var query = bll.GetBlockDailyReward(addrFrom, date, "primary-pow");
                     var lsts = (await query).ToList();
                     var ress = new Result<List<MBlockPa>>(ResultCode.Ok, null, lsts);
 
-                    decimal block_reward = ress.Data[0].reward_money;
-                    decimal count = tmp.Sum(p => p.reward);
-                    double bl = Convert.ToDouble(count / block_reward);
+                    decimal block_reward = ress.Data[0].reward_money; // date 日期内addrFrom 的pow出块奖励总额 (吐槽：这个代码，垃圾)
+                    decimal rewardSum = tmp.Sum(p => p.reward);
+                    double bl = Convert.ToDouble(rewardSum / block_reward);
 
                     if (bl < 0.975)
                     {
-                        double cz = Convert.ToDouble(block_reward - count) * 0.97;
+                        double cz = Convert.ToDouble(block_reward - rewardSum) * 0.97;
                         double bc = cz / tmp.Count;
                         foreach (var i in tmp)
                         {
                             i.reward = i.reward + Convert.ToDecimal(bc);
                         }
                     }
+                    //logic: end, 如果奖励总量不够，就补足97%
 
                     res = new Result<List<MPowPoolDailyReward>>(ResultCode.Ok, null, tmp);
                     return JsonConvert.SerializeObject(res);

@@ -23,8 +23,8 @@ namespace EDPoS_API_Core.Bll
         /// <summary>
         /// Get unlocked blocks by parameters
         /// </summary>
-        /// <param name="timeSpanMin">The start timeSpan</param>
-        /// <param name="timeSpanMax">The end timeSpan</param>
+        /// <param name="timeSpanMin">The start timeSpan(type:long)</param>
+        /// <param name="timeSpanMax">The end timeSpan(type:long)</param>
         /// <param name="addrFrom"></param>
         /// <param name="addrTo"></param>
         /// <returns></returns>
@@ -62,7 +62,7 @@ namespace EDPoS_API_Core.Bll
             {
                 var lst = await conn.QueryAsync<MUnlockBlock>(sb.ToString());
                 var tmpLst = new List<MUnlockBlockLst>();
-                foreach (var item in lst)
+                foreach (var item in lst) //省流大师： 特么就是个group by addrFrom, date 的过程
                 {
                     if (tmpLst.Where(p=>p.addrFrom.Equals(item.addrFrom) && p.date.ToString("yyyy-MM-dd").Equals(item.date.ToString("yyyy-MM-dd"))).Count() > 0)
                     {
@@ -197,6 +197,7 @@ namespace EDPoS_API_Core.Bll
         }
         #endregion
 
+        ///使用时间戳参数(long)
         public async Task<List<MPowPoolDailyReward>> GetLstSum(string timeSpanMin, string timeSpanMax, string addrFrom = "", string addrTo = "")
         {            
             List<MPowPoolDailyReward> tmpLst = new List<MPowPoolDailyReward>();

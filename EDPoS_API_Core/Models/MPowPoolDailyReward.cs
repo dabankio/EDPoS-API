@@ -5,6 +5,9 @@ using System.Threading.Tasks;
 
 namespace EDPoS_API_Core.Models
 {
+    /// <summary>
+    /// response pow model: {id, addrFrom, addrTo, reward, settlementDate}
+    /// </summary>
     public class MPowPoolDailyReward
     {
         public Int64 id { get; set; }

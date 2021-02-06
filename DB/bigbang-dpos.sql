@@ -154,3 +154,14 @@ CREATE TABLE `Tx`  (
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
 SET FOREIGN_KEY_CHECKS = 1;
+
+
+create table UnlockedBlock (
+    `id` bigint(20) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    addrFrom varchar(64),
+    addrTo varchar(64),
+    balance decimal(20, 10),
+    timeSpan int(11),
+    `date` date,
+    height int(11)
+)

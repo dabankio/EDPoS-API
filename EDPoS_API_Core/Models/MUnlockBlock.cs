@@ -5,6 +5,9 @@ namespace EDPoS_API_Core.Models
 {
     public class MUnlockBlockBase
     {
+        /// <summary>
+        /// 20g0..
+        /// </summary>
         public string addrFrom { get; set; }
         public DateTime date { get; set; }
     }
@@ -15,6 +18,9 @@ namespace EDPoS_API_Core.Models
         public long timeSpan { get; set; }
         public int height { get; set; }
     }
+    /// <summary>
+    ///  解锁的块: id, addrTo, balance, timeSpan, height
+    /// </summary>
     public class MUnlockBlock : MUnlockBlockBase
     {   
         public Int64 id { get; set; }
@@ -24,6 +30,9 @@ namespace EDPoS_API_Core.Models
         public int height { get; set; }
     }
 
+    /// <summary>
+    /// 某个矿工(addrFrom)在某个日期(date)的解锁奖励数据(list: addrTo, balance, timSpan, height)
+    /// </summary>
     public class MUnlockBlockLst : MUnlockBlockBase
     {
         public List<MUnlockBlockReward> balanceLst { get; set; }
