@@ -82,7 +82,7 @@ namespace EDPoS_API_Core.Controllers
                 {
                     isNewWay = true;
                 }
-                else if(vv.Equals("2"))
+                else if (vv.Equals("2"))
                 {
                     isNewWay = false;
                 }
@@ -102,7 +102,7 @@ namespace EDPoS_API_Core.Controllers
                             lst = await b.GetLstSum(dStart.ToString(), dEnd.ToString(), addrFrom, addrTo);
                         }
                     }
-                    
+
                     //TODO:需要处理date为空的情况
 
                     var tmp = new List<MPowPoolDailyReward>();
@@ -127,25 +127,28 @@ namespace EDPoS_API_Core.Controllers
                         }
                     }
 
-                    //logic: start, 如果奖励总量不够，就补足97%
-                    var query = bll.GetBlockDailyReward(addrFrom, date, "primary-pow");
-                    var lsts = (await query).ToList();
-                    var ress = new Result<List<MBlockPa>>(ResultCode.Ok, null, lsts);
-
-                    decimal block_reward = ress.Data[0].reward_money; // date 日期内addrFrom 的pow出块奖励总额 (吐槽：这个代码，垃圾)
-                    decimal rewardSum = tmp.Sum(p => p.reward);
-                    double bl = Convert.ToDouble(rewardSum / block_reward);
-
-                    if (bl < 0.975)
+                    if (2 > 3)
                     {
-                        double cz = Convert.ToDouble(block_reward - rewardSum) * 0.97;
-                        double bc = cz / tmp.Count;
-                        foreach (var i in tmp)
+                        //logic: start, 如果奖励总量不够，就补足97%
+                        var query = bll.GetBlockDailyReward(addrFrom, date, "primary-pow");
+                        var lsts = (await query).ToList();
+                        var ress = new Result<List<MBlockPa>>(ResultCode.Ok, null, lsts);
+
+                        decimal block_reward = ress.Data[0].reward_money; // date 日期内addrFrom 的pow出块奖励总额 (吐槽：这个代码，垃圾)
+                        decimal rewardSum = tmp.Sum(p => p.reward);
+                        double bl = Convert.ToDouble(rewardSum / block_reward);
+
+                        if (bl < 0.975)
                         {
-                            i.reward = i.reward + Convert.ToDecimal(bc);
+                            double cz = Convert.ToDouble(block_reward - rewardSum) * 0.97;
+                            double bc = cz / tmp.Count;
+                            foreach (var i in tmp)
+                            {
+                                i.reward = i.reward + Convert.ToDecimal(bc);
+                            }
                         }
+                        //logic: end, 如果奖励总量不够，就补足97%
                     }
-                    //logic: end, 如果奖励总量不够，就补足97%
 
                     res = new Result<List<MPowPoolDailyReward>>(ResultCode.Ok, null, tmp);
                     return JsonConvert.SerializeObject(res);
@@ -186,7 +189,7 @@ namespace EDPoS_API_Core.Controllers
             {
                 res = new Result<List<MPowPoolDailyReward>>(ResultCode.Fail, ex.Message, null);
                 return JsonConvert.SerializeObject(res);
-            }                        
+            }
         }
 
         /// <summary>
@@ -240,7 +243,7 @@ namespace EDPoS_API_Core.Controllers
                 }
                 else
                 {
-                    res = new Result<int>(ResultCode.Fail, null, 0);                    
+                    res = new Result<int>(ResultCode.Fail, null, 0);
                 }
                 return JsonConvert.SerializeObject(res);
             }
@@ -248,7 +251,7 @@ namespace EDPoS_API_Core.Controllers
             {
                 res = new Result<int>(ResultCode.Fail, ex.Message, 0);
                 return JsonConvert.SerializeObject(res);
-            }            
+            }
         }
 
 
@@ -286,10 +289,10 @@ namespace EDPoS_API_Core.Controllers
                         DateTime dt = new DateTime();
                         if (DateTime.TryParse(date, out dt))
                         {
-                             dateEnd = dt.AddDays(1);
-                             dStart = Convert.ToInt64(CommonHelper.GetTimeStamp(dt, zone)) / 1000;
-                             dEnd = Convert.ToInt64(CommonHelper.GetTimeStamp(dateEnd, zone)) / 1000;
-                             lst = await b.GetLstSum(dStart.ToString(), dEnd.ToString(), addrFrom, addrTo);
+                            dateEnd = dt.AddDays(1);
+                            dStart = Convert.ToInt64(CommonHelper.GetTimeStamp(dt, zone)) / 1000;
+                            dEnd = Convert.ToInt64(CommonHelper.GetTimeStamp(dateEnd, zone)) / 1000;
+                            lst = await b.GetLstSum(dStart.ToString(), dEnd.ToString(), addrFrom, addrTo);
                         }
                     }
 
@@ -336,7 +339,7 @@ namespace EDPoS_API_Core.Controllers
                         }
                     }
                     count = tmp.Sum(p => p.reward);
-                    return " 统计："+ count.ToString()+",原始:"+ ys.ToString()+ ",差额:" + cz.ToString() + ",bc:" + bc.ToString() + ",数量:" + tmp.Count.ToString() + ",地址:" + addrFrom + "开始时间:" + DateTimeOffset.FromUnixTimeSeconds(dStart).ToLocalTime().ToString() + ",结束时间:" + DateTimeOffset.FromUnixTimeSeconds(dEnd).ToLocalTime().ToString();
+                    return " 统计：" + count.ToString() + ",原始:" + ys.ToString() + ",差额:" + cz.ToString() + ",bc:" + bc.ToString() + ",数量:" + tmp.Count.ToString() + ",地址:" + addrFrom + "开始时间:" + DateTimeOffset.FromUnixTimeSeconds(dStart).ToLocalTime().ToString() + ",结束时间:" + DateTimeOffset.FromUnixTimeSeconds(dEnd).ToLocalTime().ToString();
                 }
                 else
                 {

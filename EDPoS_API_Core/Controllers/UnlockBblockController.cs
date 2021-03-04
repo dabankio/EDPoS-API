@@ -111,6 +111,7 @@ namespace EDPoS_API_Core.Controllers
                 string secretKey = mo.secretKey.Trim();
                 var isOK = DataValid.Valid(obj.requestSign, obj.appID, obj.signPlain, obj.timeSpan, secretKey);
 
+                Console.Out.WriteLine("isOK?" + isOK);
                 if (isOK)
                 {
                     var lst = obj.balanceLst;
@@ -143,6 +144,7 @@ namespace EDPoS_API_Core.Controllers
             }
             catch (Exception ex)
             {
+                Console.Out.WriteLine("err:" + ex);
                 res = new Result<int>(ResultCode.Fail, ex.Message, 0);
                 return JsonConvert.SerializeObject(res);
             }

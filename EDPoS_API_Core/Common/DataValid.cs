@@ -21,6 +21,7 @@ namespace EDPoS_API_Core.Common
         /// <returns></returns>
         public static bool Valid(string requestSign,string appID, string signPlain, string timeSpan, string secretKey)
         {
+            Console.Out.WriteLine("params:" + requestSign +", appID:" + appID +", signPlain:" + signPlain + ", timeSpan:" + timeSpan +", secretKey:" + secretKey);
             if (string.IsNullOrEmpty(timeSpan) || string.IsNullOrEmpty(requestSign) || string.IsNullOrEmpty(appID) || string.IsNullOrEmpty(signPlain))
             {
                 return false;                
@@ -32,6 +33,7 @@ namespace EDPoS_API_Core.Common
                 //hashmac
                 signPlain = appID + ":" + timeSpan + ":" + signPlain;
                 var sign = Encrypt.HmacSHA256(secretKey, signPlain);
+                Console.Out.WriteLine("signPlain:" + signPlain);
                 return requestSign.Equals(sign, StringComparison.CurrentCultureIgnoreCase);
             }
             else
